@@ -2,170 +2,179 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FijayM.Y Business</title>
+  <title>Dashboard Bisnis Bersama</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
+      background: #0a0f2c;
+      color: white;
       font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      background: #f5f6fa;
-    }
-    header {
-      background: linear-gradient(135deg, #2c3e50, #34495e);
-      color: white;
-      text-align: center;
       padding: 20px;
     }
-    h1 {
-      margin: 0;
-    }
-    .container {
-      padding: 20px;
-      max-width: 900px;
-      margin: auto;
-      background: white;
+    h1, h2 { margin: 0 0 10px; }
+    .container { display: flex; gap: 20px; flex-wrap: wrap; }
+    .card {
+      background: #151b3c;
       border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-    .form-section, .dashboard, .transaksi {
-      margin-bottom: 30px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      flex: 1;
+      min-width: 300px;
     }
     input, button {
-      padding: 12px;
-      margin: 8px 0;
-      width: 100%;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 6px;
+      border: none;
     }
     button {
-      background: #27ae60;
+      background: #28a745;
       color: white;
       cursor: pointer;
-      font-weight: bold;
     }
-    button:hover {
-      background: #219150;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
-      background: #ecf0f1;
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 5px;
-    }
-    .total {
-      font-weight: bold;
-      color: #2c3e50;
-      margin-top: 10px;
-    }
+    ul { padding-left: 20px; }
+    canvas { width: 100% !important; height: 200px !important; }
     footer {
       margin-top: 30px;
-      padding: 20px;
+      padding: 15px;
       text-align: center;
       background: #111633;
-      border-radius: 12px 12px 0 0;
+      border-radius: 12px;
       font-size: 14px;
       color: #ccc;
     }
-    .wa-btn {
-      display: inline-block;
-      margin: 10px 0;
-      padding: 12px 20px;
-      background: #25D366;
-      color: white;
-      font-weight: bold;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: 0.3s;
+    footer span {
+      display: block;
+      margin: 4px 0;
     }
-    .wa-btn:hover {
-      background: #1ebe5d;
+    footer a {
+      color: #25D366;
+      text-decoration: none;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🚀 FijayM.Y Business</h1>
-    <p>Tempat bergabung & transaksi bisnis</p>
-  </header>
 
-  <div class="container form-section">
-    <h2>📌 Pendaftaran</h2>
-    <form id="registerForm">
-      <input type="text" id="name" placeholder="Nama Lengkap" required>
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="number" id="amount" placeholder="Nominal Investasi (Rp)" required>
-      <button type="submit">Daftar & Bergabung</button>
-    </form>
-    <p id="msg"></p>
+  <h1>📊 Dashboard Bisnis Bersama</h1>
+
+  <!-- Form Pendaftaran -->
+  <div class="card">
+    <h2>Form Pendaftaran</h2>
+    <input type="text" id="nama" placeholder="Masukkan nama">
+    <button onclick="daftarUser()">Daftar</button>
+    <h3>Daftar Peserta:</h3>
+    <ul id="listUser"></ul>
   </div>
 
-  <div class="container dashboard">
-    <h2>📊 Dashboard Bisnis</h2>
-    <ul id="userList"></ul>
+  <!-- Bagian Dashboard -->
+  <div class="container">
+    <div class="card">
+      <h2>Cash in Bank</h2>
+      <div id="cashValue" class="big">$616.5K</div>
+      <canvas id="cashChart"></canvas>
+    </div>
+
+    <div class="card">
+      <h2>Expenses</h2>
+      <canvas id="expensesChart"></canvas>
+    </div>
   </div>
 
-  <div class="container transaksi">
-    <h2>💰 Transaksi Bisnis</h2>
-    <p>Klik untuk menambah transaksi:</p>
-    <button onclick="tambahTransaksi(50000)">+ Rp50.000</button>
-    <button onclick="tambahTransaksi(100000)">+ Rp100.000</button>
-    <button onclick="tambahTransaksi(200000)">+ Rp200.000</button>
-    <p class="total">Total Transaksi: <span id="total">Rp0</span></p>
+  <div class="container">
+    <div class="card">
+      <h2>Debtors</h2>
+      <div class="big">$345K</div>
+      <canvas id="debtorsChart"></canvas>
+    </div>
+    <div class="card">
+      <h2>Income vs Outgoing</h2>
+      <canvas id="incomeChart"></canvas>
+    </div>
   </div>
 
+  <!-- Footer -->
   <footer>
-    <p>📞 Info lanjut bisa hubungi:</p>
-    <a href="https://wa.me/6285722244875" target="_blank" class="wa-btn">💬 Chat via WhatsApp</a>
-    <p>By: <b>FijayM.Y</b></p>
+    <span>📞 Info lanjut bisa hubungi: 
+      <a href="https://wa.me/6285722244875" target="_blank">
+        +62 857-2224-4875
+      </a>
+    </span>
+    <span>✍️ By: <strong>fijayM.Y</strong></span>
   </footer>
 
   <script>
-    const form = document.getElementById('registerForm');
-    const userList = document.getElementById('userList');
-    const msg = document.getElementById('msg');
-    const totalEl = document.getElementById('total');
+    let users = [];
 
-    let users = JSON.parse(localStorage.getItem('users')) || [];
-    let totalTransaksi = parseInt(localStorage.getItem('totalTransaksi')) || 0;
-
-    // tampilkan data awal
-    users.forEach(user => {
-      let li = document.createElement('li');
-      li.textContent = `${user.name} (${user.email}) - Rp${user.amount}`;
-      userList.appendChild(li);
-    });
-    totalEl.textContent = "Rp" + totalTransaksi.toLocaleString();
-
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const amount = document.getElementById('amount').value;
-
-      let user = { name, email, amount };
-      users.push(user);
-      localStorage.setItem('users', JSON.stringify(users));
-
-      let li = document.createElement('li');
-      li.textContent = `${name} (${email}) - Rp${amount}`;
-      userList.appendChild(li);
-
-      msg.textContent = "✅ Pendaftaran berhasil!";
-      form.reset();
-    });
-
-    function tambahTransaksi(nominal) {
-      totalTransaksi += nominal;
-      localStorage.setItem('totalTransaksi', totalTransaksi);
-      totalEl.textContent = "Rp" + totalTransaksi.toLocaleString();
+    function daftarUser() {
+      let nama = document.getElementById("nama").value;
+      if (nama.trim() !== "") {
+        users.push(nama);
+        updateUserList();
+        document.getElementById("nama").value = "";
+      }
     }
+
+    function updateUserList() {
+      let list = document.getElementById("listUser");
+      list.innerHTML = "";
+      users.forEach(u => {
+        let li = document.createElement("li");
+        li.textContent = u;
+        list.appendChild(li);
+      });
+    }
+
+    // Chart Cash
+    new Chart(document.getElementById('cashChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [{
+          label: 'Cash',
+          data: [1000000,950000,800000,750000,700000,650000],
+          backgroundColor: 'rgba(54,162,235,0.7)'
+        }]
+      }
+    });
+
+    // Chart Expenses
+    new Chart(document.getElementById('expensesChart'), {
+      type: 'line',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [
+          { label: 'Salary', data: [200000,210000,220000,230000,240000,250000], borderColor: 'cyan', fill: false },
+          { label: 'Fixed Cost', data: [100000,150000,120000,90000,110000,130000], borderColor: 'magenta', fill: false }
+        ]
+      }
+    });
+
+    // Chart Debtors
+    new Chart(document.getElementById('debtorsChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [{
+          label: 'Debtors',
+          data: [200000,210000,220000,250000,300000,350000],
+          backgroundColor: 'lime'
+        }]
+      }
+    });
+
+    // Chart Income vs Outgoing
+    new Chart(document.getElementById('incomeChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [
+          { label: 'Income', data: [250000,300000,400000,300000,350000,380000], backgroundColor: 'gold' },
+          { label: 'Outgoing', data: [200000,250000,300000,250000,280000,320000], backgroundColor: 'orange' }
+        ]
+      }
+    });
   </script>
 </body>
 </html>
